@@ -11,7 +11,7 @@ class MonthItem extends StatelessWidget {
     required this.name,
     required this.onTap,
     this.isSelected = false,
-    this.color
+    this.color,
   });
 
   @override

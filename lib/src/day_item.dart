@@ -12,6 +12,11 @@ class DayItem extends StatelessWidget {
   final bool available;
   final Color? dotsColor;
   final Color? dayNameColor;
+  final BoxDecoration? activeDayBackgroundDecoration;
+  final TextStyle? activeDayFontStyle;
+  final TextStyle? dayFontStyle;
+  final TextStyle? activeDayNameFontStyle;
+  final TextStyle? dayNameFontStyle;
 
   const DayItem({
     Key? key,
@@ -25,36 +30,43 @@ class DayItem extends StatelessWidget {
     this.available = true,
     this.dotsColor,
     this.dayNameColor,
+    this.activeDayBackgroundDecoration,
+    this.activeDayFontStyle,
+    this.dayFontStyle,
+    this.activeDayNameFontStyle,
+    this.dayNameFontStyle,
   }) : super(key: key);
 
-  final double height = 70.0;
+  final double height = 65.0;
   final double width = 60.0;
 
   _buildDay(BuildContext context) {
     final textStyle = TextStyle(
       color: available
-        ? dayColor ?? Theme.of(context).colorScheme.secondary
-        : dayColor?.withOpacity(0.5) ??
-        Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+          ? dayColor ?? Theme.of(context).colorScheme.secondary
+          : dayColor?.withOpacity(0.5) ??
+              Theme.of(context).colorScheme.secondary.withOpacity(0.5),
       fontSize: 32,
-      fontWeight: FontWeight.normal);
+      fontWeight: FontWeight.normal,
+    ).merge(dayFontStyle);
     final selectedStyle = TextStyle(
       color: activeDayColor ?? Colors.white,
       fontSize: 32,
       fontWeight: FontWeight.bold,
       height: 0.8,
-    );
+    ).merge(activeDayFontStyle);
 
     return GestureDetector(
       onTap: available ? onTap as void Function()? : null,
       child: Container(
         decoration: isSelected
-          ? BoxDecoration(
-          color:
-          activeDayBackgroundColor ?? Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(12.0),
-        )
-          : BoxDecoration(color: Colors.transparent),
+            ? activeDayBackgroundDecoration ??
+                BoxDecoration(
+                  color: activeDayBackgroundColor ??
+                      Theme.of(context).colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(12.0),
+                )
+            : BoxDecoration(color: Colors.transparent),
         height: height,
         width: width,
         child: Column(
@@ -69,14 +81,24 @@ class DayItem extends StatelessWidget {
               dayNumber.toString(),
               style: isSelected ? selectedStyle : textStyle,
             ),
+            SizedBox(height: 5),
             if (isSelected)
               Text(
                 shortName,
                 style: TextStyle(
-                  color: dayNameColor ?? activeDayColor ?? Colors.white,
+                  color: activeDayColor ?? Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
-                ),
+                ).merge(activeDayNameFontStyle),
+              )
+            else
+              Text(
+                shortName,
+                style: TextStyle(
+                  color: dayNameColor ?? Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ).merge(dayNameFontStyle),
               ),
           ],
         ),
